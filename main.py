@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 import uvicorn
-from fastapi_house.api import property, review, auth, social_auth
-from fastapi_house.admin.setup import setup_admin
+from api import property, review, auth, social_auth
+from admin.setup import setup_admin
 from starlette.middleware.sessions import SessionMiddleware
-from fastapi_house.config import SECRET_KEY
+from config import SECRET_KEY
 
 
 udemy = FastAPI()
@@ -16,4 +16,4 @@ setup_admin(udemy)
 
 
 if __name__ == '__main__':
-    uvicorn.run(udemy, host='127.0.0.1', port=8000)
+    uvicorn.run(udemy, host='127.0.0.1', port=8001)

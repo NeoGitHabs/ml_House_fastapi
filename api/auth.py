@@ -1,14 +1,14 @@
 from fastapi import Depends, HTTPException, APIRouter
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from fastapi_house.db.database import get_db
-from fastapi_house.db.schema import UserProfileSchema, UserProfileRegisterSchema, UserProfileLoginSchema
-from fastapi_house.db.models import UserProfile, RefreshToken
+from db.database import get_db
+from db.schema import UserProfileSchema, UserProfileRegisterSchema, UserProfileLoginSchema
+from db.models import UserProfile, RefreshToken
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone
 from jose import jwt
-from fastapi_house.db.config import SECRET_KEY, ALGORITHM, REFRESH_TOKEN_EXPIRE_DAYS, ACCESS_TOKEN_EXPIRE_MINUTES
+from config import SECRET_KEY, ALGORITHM, REFRESH_TOKEN_EXPIRE_DAYS, ACCESS_TOKEN_EXPIRE_MINUTES
 
 
 auth_router = APIRouter(prefix='/auth', tags=['Auth'])

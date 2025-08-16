@@ -1,9 +1,9 @@
 from fastapi import Depends, HTTPException, APIRouter
 from sqlalchemy.orm import Session
 from typing import List
-from fastapi_house.db.database import get_db
-from fastapi_house.db.models import Review
-from fastapi_house.db.schema import ReviewSchema, ReviewCreateSchema
+from db.database import get_db
+from db.models import Review
+from db.schema import ReviewSchema, ReviewCreateSchema
 
 review_router = APIRouter(prefix='/review', tags=['Review'])
 

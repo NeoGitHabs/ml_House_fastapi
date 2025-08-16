@@ -1,10 +1,10 @@
 from fastapi import APIRouter
-from fastapi_house.db.database import get_db
+from db.database import get_db
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from starlette.requests import Request
 from authlib.integrations.starlette_client import OAuth
-from fastapi_house.config import settings
+from config import settings
 
 
 social_router = APIRouter(prefix='/oauth', tags=['Social Auth'])

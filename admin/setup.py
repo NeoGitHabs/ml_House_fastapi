@@ -1,7 +1,7 @@
 from .views import UserProfileAdmin, PropertyAdmin, ReviewAdmin
 from fastapi import FastAPI
 from sqladmin import Admin
-from fastapi_house.db.database import engine
+from db.database import engine
 
 
 def setup_admin(udemy:FastAPI):

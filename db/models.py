@@ -13,23 +13,26 @@ class ROLE_CHOICES(str, PyEnum):
 
 class UserProfile(Base):
     __tablename__ = 'userprofile'
+
     id: Mapped[int] = mapped_column(Integer, autoincrement=True, primary_key=True)
     avatar: Mapped[str | None] = mapped_column(String, nullable=True)
     first_name: Mapped[str] = mapped_column(String(32))
     lastname: Mapped[str] = mapped_column(String(32))
     username: Mapped[str] = mapped_column(String, unique=True)
     email: Mapped[str] = mapped_column(String, unique=True)
-    phone_number: Mapped[str | None] = mapped_column(String)
+    phone_number: Mapped[str | None] = mapped_column(String, nullable=True)
     password: Mapped[str] = mapped_column(String)
     role: Mapped[ROLE_CHOICES] = mapped_column(Enum(ROLE_CHOICES))
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda : datetime.now(timezone.utc))
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
 
-    seller_property: Mapped[List['Property']] = relationship('Property', back_populates='seller', cascade='all, delete-orphan')
-    seller_review: Mapped[List['Property']] = relationship('Property', back_populates='seller', cascade='all, delete-orphan')
-    buyer_review: Mapped[List['Review']] = relationship('Review', back_populates='buyer', cascade='all, delete-orphan')
+    seller_properties: Mapped[List['Property']] = relationship('Property', back_populates='seller', cascade='all, delete-orphan')
+    seller_reviews: Mapped[List['Review']] = relationship('Review', back_populates='seller', foreign_keys='Review.seller_id', cascade='all, delete-orphan')
+    buyer_reviews: Mapped[List['Review']] = relationship( 'Review', back_populates='buyer', foreign_keys='Review.buyer_id', cascade='all, delete-orphan')
+    seller_property: Mapped[List['Property']] = relationship( 'Property', back_populates='seller', cascade='all, delete-orphan')
 
     def __str__(self):
-        return f'{UserProfile.username} {UserProfile.role}'
+        return f'{self.username} ({self.role})'
+
 
 class RefreshToken(Base):
     __tablename__ = 'refresh_token'
@@ -92,15 +95,16 @@ class Property(Base):
 
 class Review(Base):
     __tablename__ = 'review'
+
     id: Mapped[int] = mapped_column(Integer, autoincrement=True, primary_key=True)
     comment: Mapped[str | None] = mapped_column(Text, nullable=True)
     rating: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda : datetime.now(timezone.utc))
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     buyer_id: Mapped[int] = mapped_column(ForeignKey('userprofile.id'))
-    buyer: Mapped['UserProfile'] = relationship('UserProfile', back_populates='buyer_review')
+    buyer: Mapped['UserProfile'] = relationship( 'UserProfile', back_populates='buyer_reviews', foreign_keys=[buyer_id])
     seller_id: Mapped[int] = mapped_column(ForeignKey('userprofile.id'))
-    seller: Mapped['UserProfile'] = relationship('UserProfile', back_populates='seller_review')
+    seller: Mapped['UserProfile'] = relationship( 'UserProfile', back_populates='seller_reviews', foreign_keys=[seller_id])
 
     def __str__(self):
-        return f'{Review.seller} {Review.rating} {Review.comment}'
+        return f'{self.seller.username} rated {self.rating}: {self.comment}'

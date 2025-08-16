@@ -75,11 +75,18 @@ class PropertySchema(BaseModel):
     class Config:
         from_attributes = True
 
-class Review(BaseModel):
+class ReviewSchema(BaseModel):
     id: int
     comment: str | None
     rating: int | None
     created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class ReviewCreateSchema(BaseModel):
+    comment: str | None
+    rating: int | None
 
     class Config:
         from_attributes = True
