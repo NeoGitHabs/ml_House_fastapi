@@ -1,19 +1,18 @@
 from fastapi import APIRouter
-from pyexpat import features
 import joblib
 from db.schema import HousePredictSchema
 
 
 scaler = joblib.load('scaler.pkl')
-model = joblib.load('model.pkl')
+model = joblib.load('lin_model.pkl')
 
-predict_router = APIRouter(prefix='/predict', tags=['Predict Price'])
+lin_predict_router = APIRouter(prefix='/lin_predict', tags=['Linear Predict Price'])
 
 nei = ['Blueste', 'BrDale', 'BrkSide', 'ClearCr', 'CollgCr', 'Crawfor', 'Edwards', 'Gilbert', 'IDOTRR', 'MeadowV',
        'Mitchel', 'NAmes', 'NPkVill', 'NWAmes', 'NoRidge', 'NridgHt', 'OldTown', 'SWISU', 'Sawyer', 'SawyerW',
        'Somerst', 'StoneBr', 'Timber', 'Veenker']
 
-@predict_router.post('/')
+@lin_predict_router.post('/')
 async def predict_price(house: HousePredictSchema):
     house_dict = dict(house)
 
